@@ -1,4 +1,5 @@
 package sef.module10.activity;
+import javax.swing.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -21,7 +22,7 @@ public class StudentGradeProcessor {
 
     public void processGrades() {
 
-        logger.info("Starting grade processing"); // flow start
+        logger.info("\u001B[32mStarting grade processing \u001B[0m "); // flow start
         List<String> rawRecords = Arrays.asList(
                 "Alise,Java,9",
                 "Rihards,Python,9",
@@ -52,11 +53,11 @@ public class StudentGradeProcessor {
             }
         }
 
-        logger.info("Finished parsing records. Invalid Record: "+ invalidCount); // summary useful for debugging
+        logger.info("\u001B[32mFinished parsing records. Invalid Record:"+ invalidCount +"\u001B[0m "); // summary useful for debugging
 
         for (String course : studentsByCourse.keySet()) {
             double average = calculateAverage(studentsByCourse.get(course));
-            System.out.println(course + ": average mark = " + average); // FIX: removed *10
+            System.out.println(course + ": average mark = "+String.format("%.2f" , average)); // FIX: removed *10
         }
     }
 
@@ -117,9 +118,9 @@ public class StudentGradeProcessor {
             count++;
         }
         double average = (double) total / students.size();
-logger.fine("Calculated average: total=" + total +
-        ", count=" + students.size() +
-        ", average=" + average);
+//logger.fine("Calculated average: total=" + total +
+//        ", count=" + students.size() +
+//        ", average=" + average);
         // FIX: avoid integer division
         return average;
     }
