@@ -27,7 +27,7 @@ public class StudentGradeProcessor {
                 "Mantas,Python,11",     // should be ignored
                 "Franks,java,9",        // should count as Java
                 "Gita,Python,6",
-                "Henrijs,Database,",    // should be ignored
+                "Henrijs,Database,",    // should be ignored bug
                 "Ivars,Java,9"
         );
 
@@ -51,7 +51,7 @@ public class StudentGradeProcessor {
 
         for (String course : courses) {
             double avg = calculator.average(studentsByCourse.get(course));
-            System.out.println(course + ": average mark = " + avg); // fixes *10
+            System.out.println(course + ": average mark = " + avg); // fixes *10 1st bug
         }
     }
 }

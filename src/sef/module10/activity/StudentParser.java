@@ -20,10 +20,10 @@ public class StudentParser {
         try {
             grade = Integer.parseInt(gradeStr);
         } catch (NumberFormatException e) {
-            return null; // bonus: avoid crash
+            return null; // bonus: add try catch for avoid crash
         }
 
-        if (grade < 1 || grade > 10) {
+        if (grade < 1 || grade > 10) {  // && replace as ||
             return null; // fixes accepting 11
         }
 

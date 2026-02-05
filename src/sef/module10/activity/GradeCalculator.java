@@ -10,12 +10,12 @@ public class GradeCalculator {
         int total = 0;
         int count = 0;
 
-        for (int i = 0; i < students.size(); i++) { // fixes skip index 0
+        for (int i = 0; i < students.size(); i++) { // fixes skip index 0 bug
             Student s = students.get(i);
             total += s.getGrade();
             count++;
         }
 
-        return count == 0 ? 0.0 : (double) total / count; // fixes int division
+        return  (double) total / count; // fixes int division
     }
 }
