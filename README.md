@@ -8,3 +8,8 @@ Parses student records from raw text
 Groups students by course using Map<String, List<Student>>
 Calculates average marks per course
 Produces incorrect output due to multiple bugs
+
+
+Java: average mark = 8.75
+Python: average mark = 7.33
+Database: average mark = 10.0
