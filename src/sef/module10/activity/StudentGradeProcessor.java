@@ -1,5 +1,6 @@
 package sef.module10.activity;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Application fixed using debugging
@@ -11,12 +12,16 @@ import java.util.*;
  */
 public class StudentGradeProcessor {
 
+    private static final Logger logger = Logger.getLogger(StudentGradeProcessor.class.getName());
+
     public static void main(String[] args) {
         StudentGradeProcessor processor = new StudentGradeProcessor();
         processor.processGrades();
     }
 
     public void processGrades() {
+
+        logger.info("Starting grade processing"); // flow start
         List<String> rawRecords = Arrays.asList(
                 "Alise,Java,9",
                 "Rihards,Python,9",
@@ -32,6 +37,8 @@ public class StudentGradeProcessor {
 
         Map<String, List<Student>> studentsByCourse = new HashMap<>();
 
+        int invalidCount = 0;
+
         for (String record : rawRecords) {
             Student student = parseStudent(record);
             if (student != null) {
@@ -40,8 +47,12 @@ public class StudentGradeProcessor {
                     studentsByCourse.put(course, new ArrayList<>());
                 }
                 studentsByCourse.get(course).add(student);
+            }else{
+                invalidCount ++;
             }
         }
+
+        logger.info("Finished parsing records. Invalid Record: "+ invalidCount); // summary useful for debugging
 
         for (String course : studentsByCourse.keySet()) {
             double average = calculateAverage(studentsByCourse.get(course));
@@ -53,6 +64,7 @@ public class StudentGradeProcessor {
         String[] parts = record.split(",", -1);
 
         if (parts.length != 3) {
+            logger.warning("Skipping invalid record (Wrong format)" + record);
             return null;
         }
 
@@ -62,18 +74,21 @@ public class StudentGradeProcessor {
 
         // FIX: ignore missing values
         if (name.isEmpty() || courseRaw.isEmpty() || gradeStr.isEmpty()) {
+            logger.warning("Skipping invalid record (missing value): "+ record);
             return null;
         }
 
         Integer grade;
         try {
             grade = Integer.parseInt(gradeStr);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException exception) {
+            logger.warning("Skipping invalid record (non numeric grade): "+ record);
             return null;
         }
 
         // FIX: correct validation condition
         if (grade < 1 || grade > 10) {
+            logger.warning("Skipping invalid record (grade out of range): " + record);
             return null;
         }
 
@@ -82,11 +97,13 @@ public class StudentGradeProcessor {
                 courseRaw.substring(0, 1).toUpperCase() +
                         courseRaw.substring(1).toLowerCase();
 
+        logger.fine("Parsed student: " + name +", " + course+ "," + grade); //detailed info only useful during debugging
         return new Student(name, course, grade);
     }
 
     private double calculateAverage(List<Student> students) {
         if (students == null || students.isEmpty()) {
+            logger.warning("No students found for course. Returning 0.0");
             return 0.0;
         }
 
@@ -99,9 +116,12 @@ public class StudentGradeProcessor {
             total += student.getGrade();
             count++;
         }
-
+        double average = (double) total / students.size();
+logger.fine("Calculated average: total=" + total +
+        ", count=" + students.size() +
+        ", average=" + average);
         // FIX: avoid integer division
-        return (double) total / count;
+        return average;
     }
 
     static class Student {
